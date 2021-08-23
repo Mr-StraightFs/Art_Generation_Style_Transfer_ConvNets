@@ -141,3 +141,37 @@ def compute_style_cost(style_image_output, generated_image_output, STYLE_LAYERS=
 
     return J_style
 
+
+@tf.function()
+def total_cost(J_content, J_style, alpha=10, beta=40):
+    """
+    Computes the total cost function
+
+    Arguments:
+    J_content -- content cost coded above
+    J_style -- style cost coded above
+    alpha -- hyperparameter weighting the importance of the content cost
+    beta -- hyperparameter weighting the importance of the style cost
+
+    Returns:
+    J -- total cost as defined by the formula above.
+    """
+
+    J = alpha * J_content + beta * J_style
+
+    return J
+
+content_image = np.array(Image.open("images/louvre_small.jpg").resize((img_size, img_size)))
+content_image = tf.constant(np.reshape(content_image, ((1,) + content_image.shape)))
+
+print(content_image.shape)
+imshow(content_image[0])
+plt.show()
+
+style_image =  np.array(Image.open("images/monet.jpg").resize((img_size, img_size)))
+style_image = tf.constant(np.reshape(style_image, ((1,) + style_image.shape)))
+
+print(style_image.shape)
+imshow(style_image[0])
+plt.show()
+
